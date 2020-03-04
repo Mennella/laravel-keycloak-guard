@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use KeycloakGuard\Exceptions\TokenException;
 use KeycloakGuard\Exceptions\UserNotFoundException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
+use KeycloakGuard\Exceptions\ClaimsNotValidException;
 
 class KeycloakGuard implements Guard
 {
@@ -122,6 +123,8 @@ class KeycloakGuard implements Guard
     }
 
     $this->validateResources();
+	//TODO validare aud e company token 
+	$this->validateClaims();
 
     if ($this->config['load_user_from_database']) {
       $user = $this->provider->retrieveByCredentials($credentials);
@@ -165,6 +168,21 @@ class KeycloakGuard implements Guard
     if (count(array_intersect($token_resource_access, $allowed_resources)) == 0) {
       throw new ResourceAccessNotAllowedException("The decoded JWT token has not a valid `resource_access` allowed by API. Allowed resources by API: " . $this->config['allowed_resources']);
     }
+  }
+  
+  
+  /**
+   * Validate if authenticated user has a valid resource
+   *
+   * @return void
+   */
+  private function validateClaims()
+  {
+    $token_resource_access = array_keys((array)($this->decodedToken->resource_access ?? []));
+    $config_claims = $this->config['claims']);
+	if (count(array_intersect_assoc(config_claims, $$this->decodedToken)) !== count($config_claims)) {
+		throw new ClaimsNotValidException("The decoded JWT token has not a valid claims');
+	}
   }
 
   /**

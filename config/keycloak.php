@@ -11,5 +11,13 @@ return [
 
   'append_decoded_token' => env('KEYCLOAK_APPEND_DECODED_TOKEN', false),
 
-  'allowed_resources' => env('KEYCLOAK_ALLOWED_RESOURCES', null)
+  'allowed_resources' => env('KEYCLOAK_ALLOWED_RESOURCES', null),
+  
+  'aud' => env('KEYCLOAK_AUD', null),
+  
+  'azp' => env('KEYCLOAK_AZP', null),
+  
+  'typ' => env('KEYCLOAK_ALLOWED_RESOURCES', 'Bearer),
+  
+  'iss' => env('KEYCLOAK_ISS', null)
 ];
